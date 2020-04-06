@@ -66,11 +66,40 @@ body {
 }
 
 .free {
-  font-size:3em;
+  font-size: 1em;
   font-weight: bold;
   top: 50%;
-    transform: translateY(-50%);
-    position: relative;
+  transform: translateY(-50%);
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.game_code {
+  font-weight: bold;
+}
+
+@media (min-width: 461px) {
+  .free {
+    font-size: 2em;
+  }
+}
+
+@media (min-width: 701px) {
+  .free {
+    font-size: 3em;
+  }
 }
 
 .marked {
@@ -109,7 +138,7 @@ body {
   <div class="header">N</div>
   <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
   <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
-  <div class="row"><div class="aspect-ratio-1-1"><div class="free">FREE</div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="free" title="FREE">FREE</div></div></div>
   <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
   <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
 </div>
@@ -135,7 +164,7 @@ body {
 </div>
 <p style="margin-left: 5px;">Game Code: <span class="game_code"></span></p>
 
-<button onclick="startNewGame()" style="margin-left: 5pm;">New Game</button>
+<button onclick="startNewGame()" class="button" style="margin-left: 5px;">New Game</button>
 
 <script>
   var initialisedEvents = false;
@@ -211,7 +240,7 @@ body {
   }
 
   function generateGameCode(length) {
-      var s = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      var s = "ABCDEFGHJKLMNPQRTUVWXY0123456789";
       return Array.apply(null, Array(length)).map(function() { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
   }
 
