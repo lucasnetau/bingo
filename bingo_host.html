@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<head>
+<style>
+* {
+  margin:0;
+  padding:0;
+}
+
+body {
+  min-width: 300px;
+}
+
+.bingo_card {
+  display: flex;
+  max-width: 1000px;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  border: 1px solid black;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  position: relative;
+  cursor: pointer;
+}
+
+.header {
+  font-size:3em;
+  font-weight: bold;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.column {
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+  border: 1px solid black;
+}
+
+.aspect-ratio-1-1 {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.number {
+  font-size:3em;
+  font-weight: bold;
+  top: 50%;
+    transform: translateY(-50%);
+    position: relative;
+}
+
+.free {
+  font-size: 1em;
+  font-weight: bold;
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.game_code {
+  font-weight: bold;
+}
+
+.drawn-numbers {
+  margin-top:1em;
+  font-size: 48px;
+}
+
+.drawn-numbers span {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+@media (min-width: 461px) {
+  .free {
+    font-size: 2em;
+  }
+}
+
+@media (min-width: 701px) {
+  .free {
+    font-size: 3em;
+  }
+}
+
+.marked {
+  background: red;
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+
+</head>
+
+<body>
+
+<h1>Welcome Bingo Host</h1>
+
+<button onclick="startNewGame()" class="button" style="margin-left: 5px;">New Game</button>
+
+<button onclick="drawNumber()" class="button" style="margin-top:40px; margin-left: 5px;">Draw Number</button>
+
+<div class="drawn-numbers">
+
+</div>
+
+
+
+<div class="bingo_card" style="display:none">
+
+<div class="column">
+  <div class="header">B</div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+</div>
+
+<div class="column">
+  <div class="header">I</div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+</div>
+
+<div class="column">
+  <div class="header">N</div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="free" title="FREE">FREE</div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+</div>
+
+<div class="column">
+  <div class="header">G</div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+</div>
+
+<div class="column">
+  <div class="header">O</div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+  <div class="row"><div class="aspect-ratio-1-1"><div class="number"></div></div></div>
+</div>
+
+</div>
+
+
+<script>
+  var initialisedEvents = false;
+
+  function randomBingoCard(seed) {
+      var myrng = new Math.seedrandom(seed);
+
+      var cellCount = 0;
+
+      var myNumbers = [];
+
+      document.querySelectorAll('.bingo_card .number').forEach(function(cell) {
+          ++cellCount;
+
+          var min;
+          var max;
+
+          switch(cellCount) {
+              case 1:
+              case 2:
+              case 3:
+              case 4:
+              case 5:
+                min = 1;
+                max = 15;
+                break;
+              case 6:
+              case 7:
+              case 8:
+              case 9:
+              case 10:
+                min = 16;
+                max = 30;
+                break;
+
+              case 11:
+              case 12:
+              case 13:
+              case 14:
+                min = 31;
+                max = 45;
+                break;
+
+              case 15:
+              case 16:
+              case 17:
+              case 18:
+              case 19:
+                min = 46;
+                max = 60;
+                break;
+
+              case 20:
+              case 21:
+              case 22:
+              case 23:
+              case 24:
+                min = 61;
+                max = 75;
+                break;
+
+          }
+
+          var number = Math.floor(myrng() * (max - min + 1)) + min;
+
+          while (myNumbers.includes(number)) {
+              number = Math.floor(myrng() * (max - min + 1)) + min;
+          }
+
+          myNumbers.push(number);
+          cell.innerHTML = ""+number;
+      });
+  }
+
+  var Numbers = [];
+
+  function startNewGame() {
+      //randomBingoCard(code);
+      if (!initialisedEvents) {
+        initialisedEventsHandlers();
+        initialisedEvents = true;
+      }
+      Numbers = [];
+      var parent = document.getElementsByClassName("drawn-numbers")[0];
+      while(parent.firstChild) {
+        parent.firstChild.remove();
+      }
+  }
+
+  function drawNumber() {
+    if (Numbers.length === 75) {
+      return;
+    }
+    var min = 1;
+    var max = 75;
+    var number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    while (Numbers.includes(number)) {
+      number =  Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    Numbers.push(number);
+    var child = document.createElement('span');
+    child.textContent = number;
+    document.getElementsByClassName("drawn-numbers")[0].appendChild(child);
+  }
+
+  function initialisedEventsHandlers() {
+
+  }
+
+  document.addEventListener('DOMContentLoaded', function(event) {
+    startNewGame();
+  })
+
+</script>
+
+</body>
+
+</html>
