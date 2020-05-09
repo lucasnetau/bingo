@@ -106,6 +106,72 @@ body {
   background: red;
 }
 
+.mt-1 {
+  margin-top: 5px !important;
+}
+
+.mb-1 {
+  margin-bottom: 5px !important;
+}
+
+.ml-1 {
+  margin-left: 5px !important;
+}
+
+.strike-through:before {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  border-bottom: 1px solid #111;
+  width: 100%;
+}
+
+.strike-down:after {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-left: 1px solid #111;
+  height: 100%;
+}
+
+.strike-diag-top-down-right-left {
+  background:
+          linear-gradient(to top left,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) calc(50% - 0.8px),
+          rgba(0,0,0,1) 50%,
+          rgba(0,0,0,0) calc(50% + 0.8px),
+          rgba(0,0,0,0) 100%);
+}
+
+.strike-diag-top-down-left-right {
+  background:
+          linear-gradient(to top right,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) calc(50% - 0.8px),
+          rgba(0,0,0,1) 50%,
+          rgba(0,0,0,0) calc(50% + 0.8px),
+          rgba(0,0,0,0) 100%);
+}
+
+.strike-diag-top-down-left-right.strike-diag-top-down-right-left {
+  background:
+          linear-gradient(to top left,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) calc(50% - 0.8px),
+          rgba(0,0,0,1) 50%,
+          rgba(0,0,0,0) calc(50% + 0.8px),
+          rgba(0,0,0,0) 100%),
+          linear-gradient(to top right,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) calc(50% - 0.8px),
+          rgba(0,0,0,1) 50%,
+          rgba(0,0,0,0) calc(50% + 0.8px),
+          rgba(0,0,0,0) 100%);
+}
+
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
@@ -162,9 +228,29 @@ body {
 </div>
 
 </div>
-<p style="margin-left: 5px;">Game Code: <span class="game_code"></span></p>
 
-<button onclick="startNewGame()" class="button" style="margin-left: 5px;">New Game</button>
+<div class="mt-1">
+
+  <button onclick="column_strike(1)" class="button ml-1 mb-1">B</button>
+  <button onclick="column_strike(2)" class="button ml-1 mb-1">I</button>
+  <button onclick="column_strike(3)" class="button ml-1 mb-1">N</button>
+  <button onclick="column_strike(4)" class="button ml-1 mb-1">G</button>
+  <button onclick="column_strike(5)" class="button ml-1 mb-1">O</button>
+
+  <button onclick="row_strike(1)" class="button ml-1 mb-1">1R</button>
+  <button onclick="row_strike(2)" class="button ml-1 mb-1">2R</button>
+  <button onclick="row_strike(3)" class="button ml-1 mb-1">3R</button>
+  <button onclick="row_strike(4)" class="button ml-1 mb-1">4R</button>
+  <button onclick="row_strike(5)" class="button ml-1 mb-1">5R</button>
+
+  <button onclick="diag_strike(1)" class="button ml-1 mb-1">\</button>
+  <button onclick="diag_strike(2)" class="button ml-1 mb-1">/</button>
+
+</div>
+
+<p class="ml-1">Game Code: <span class="game_code"></span></p>
+
+<button onclick="startNewGame()" class="button ml-1">New Game</button>
 
 <script>
   var initialisedEvents = false;
@@ -272,6 +358,33 @@ body {
   document.addEventListener('DOMContentLoaded', function(event) {
     startNewGame();
   })
+
+  function column_strike(col) {
+    Array.from(document.getElementsByClassName("row")).forEach(function(element, index) {
+      if (index < col*5 && index >= (col-1)*5) {
+        element.firstElementChild.classList.toggle('strike-down');
+      }
+    });
+  }
+
+  function row_strike(row) {
+    Array.from(document.getElementsByClassName("row")).forEach(function(element, index) {
+      if ((row-index-1)%5 === 0) {
+        element.firstElementChild.classList.toggle('strike-through');
+      }
+    });
+  }
+
+  function diag_strike(diag) {
+    Array.from(document.getElementsByClassName("row")).forEach(function(element, index) {
+      if (diag === 1 && index%6 === 0) {
+        element.firstElementChild.classList.toggle('strike-diag-top-down-left-right');
+      }
+      if (diag === 2 && index !== 0 && index !== 24 && index%4 === 0) {
+        element.firstElementChild.classList.toggle('strike-diag-top-down-right-left');
+      }
+    });
+  }
 
 </script>
 
