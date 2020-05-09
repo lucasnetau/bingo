@@ -331,7 +331,10 @@ body {
   }
 
   function startNewGame() {
-    Array.from(document.getElementsByClassName("row")).forEach(function(element) { element.classList.remove('marked'); });
+    Array.from(document.getElementsByClassName("row")).forEach(function(element) {
+      element.classList.remove('marked');
+      element.firstElementChild.classList.remove('strike-down','strike-through','strike-diag-top-down-left-right','strike-diag-top-down-right-left');
+    });
       var code = generateGameCode(5);
       document.querySelectorAll('.game_code')[0].textContent = ""+code;
       randomBingoCard(code);
@@ -343,12 +346,7 @@ body {
 
   function toggleMarked(event) {
       var cell = event.currentTarget;
-
-      if (cell.classList.contains('marked')) {
-        cell.classList.remove('marked');
-      } else {
-        cell.classList.add('marked');
-      }
+      cell.classList.toggle('marked');
   }
 
   function initialisedEventsHandlers() {
