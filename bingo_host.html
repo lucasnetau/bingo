@@ -12,6 +12,7 @@
 
 body {
   min-width: 300px;
+  margin-left: 5px;
 }
 
 .bingo_card {
@@ -127,9 +128,13 @@ body {
 
 <h1>Welcome Bingo Host</h1>
 
-<button onclick="startNewGame()" class="button" style="margin-left: 5px;">New Game</button>
+<div>
+<button onclick="startNewGame()" class="button">New Game</button>
 
-<button onclick="drawNumber()" class="button" style="margin-top:40px; margin-left: 5px;">Draw Number</button>
+<button onclick="drawNumber()" class="button" style="margin-top:40px; margin-left:5px">Draw Number</button>
+</div>
+
+<h2 id="next-number" style="margin-top: 10px;"></h2>
 
 <div class="drawn-numbers">
 
@@ -273,10 +278,12 @@ body {
       while(parent.firstChild) {
         parent.firstChild.remove();
       }
+      document.getElementById('next-number').textContent = "Game ready to begin!";
   }
 
   function drawNumber() {
     if (Numbers.length === 75) {
+      document.getElementById('next-number').textContent = "That's All Folks!";
       return;
     }
     var min = 1;
@@ -290,6 +297,7 @@ body {
     var child = document.createElement('span');
     child.textContent = number;
     document.getElementsByClassName("drawn-numbers")[0].appendChild(child);
+    document.getElementById('next-number').textContent = "Next Number: " + (getPhraseForNumber(number) + " " + number).trim();
   }
 
   function initialisedEventsHandlers() {
@@ -299,6 +307,38 @@ body {
   document.addEventListener('DOMContentLoaded', function(event) {
     startNewGame();
   })
+
+  function getPhraseForNumber(num) {
+    var phrases = [];
+    phrases[1] = "First on the board";
+    phrases[2] = "ONE LITTLE DUCK";
+    phrases[4] = "Shut the door";
+    phrases[5] = "Snakes Alive";
+    phrases[8] = "At the Gate";
+    phrases[11] = "Legs Eleven";
+    phrases[12] = "Just a Dozen";
+    phrases[13] = "Lucky for some";
+    phrases[16] = "Sweet Sixteen";
+    phrases[22] = "Two Little Ducks";
+    phrases[25] = "Duck and dive";
+    phrases[30] = "Dirty Thirty";
+    phrases[33] = "All the Threes";
+    phrases[40] = "Naughty Fourty";
+    phrases[42] = "The answer to life, the universe and everything";
+    phrases[43] = "Down on your knees";
+    phrases[44] = "All the Fours";
+    phrases[50] = "Half a Centurty";
+    phrases[55] = "Snakes alive, All the fives";
+    phrases[60] = "Blind Sixty";
+    phrases[66] = "Clickety-Click";
+    phrases[69] = "Dinner for Two";
+    phrases[75] = "End of the Card";
+
+    if (num in phrases) {
+      return phrases[num];
+    }
+    return '';
+  }
 
 </script>
 
