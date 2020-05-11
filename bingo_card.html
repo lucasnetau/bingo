@@ -359,7 +359,7 @@ body {
 
   function column_strike(col) {
     Array.from(document.getElementsByClassName("row")).forEach(function(element, index) {
-      if (index < col*5 && index >= (col-1)*5) {
+      if (col === Math.ceil((index+1)/5)) {
         element.firstElementChild.classList.toggle('strike-down');
       }
     });
