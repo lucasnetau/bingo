@@ -244,8 +244,8 @@ body {
   <button onclick="row_strike(4)" class="button ml-1 mb-1">4R</button>
   <button onclick="row_strike(5)" class="button ml-1 mb-1">5R</button>
 
-  <button onclick="diag_strike(1)" class="button ml-1 mb-1">\</button>
-  <button onclick="diag_strike(2)" class="button ml-1 mb-1">/</button>
+  <button onclick="diag_strike(1)" class="button ml-1 mb-1">&#x2572;</button>
+  <button onclick="diag_strike(2)" class="button ml-1 mb-1">&#x2571;</button>
 
 </div>
 
@@ -360,7 +360,7 @@ body {
 
   function column_strike(col) {
     Array.from(document.getElementsByClassName("row")).forEach(function(element, index) {
-      if (index < col*5 && index >= (col-1)*5) {
+      if (col === Math.ceil((index+1)/5)) {
         element.firstElementChild.classList.toggle('strike-down');
       }
     });
